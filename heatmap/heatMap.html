@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeatMap</title>
+    <style>
+        html, body{
+            margin: 0;
+            padding: 0;
+        }
+        .map-box{
+            width:100vw; 
+            height:100vh;
+            position: relative;
+        }
+
+        .tools-group{
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: 1px solid red;
+            z-index: 999;
+        }
+
+        .zoom-group{
+            
+
+        }
+    </style>
+    
+</head>
+<body onLoad="onLoad()">
+    <div class='tools-group'>
+        <div class='zoom-group'>
+            <input type="button" id="button1" onClick="map.zoomIn()" value="放大地图"/>
+            <input type="button" id="button2" onClick="map.zoomOut()" value="缩小地图"/>
+        </div>
+        <div>
+            <input type="button"  onClick="getMapBounds()" value="获取地图范围"/>
+        </div>
+        <div>
+            <p>设置地图样式：</p>
+            <input type="button"  onClick="map.setStyle('black')" value="block"/>
+            <input type="button"  onClick="map.setStyle('indigo')" value="indigo"/>
+            <input type="button"  onClick="map.removeStyle()" value="恢复默认"/>
+        </div>
+        <div>
+            <input type="button"  onClick="getMapCenter()" value="获取地图中心坐标"/>
+        </div>
+    </div>
+    <div id="mapDiv" class='map-box'></div>
+    <script src="http://api.tianditu.gov.cn/api?v=4.0&tk=f0c94499ef7f7f653c3aced1e2d5b7f9" type="text/javascript"></script>
+    <script type="text/javascript" src="http://lbs.tianditu.gov.cn/api/js4.0/opensource/openlibrary/ImageOverlay.js"></script>
+    <script>
+        var map;
+        var zoom = 12;
+        function onLoad() {
+            map = new T.Map('mapDiv');
+            map.centerAndZoom(new T.LngLat(118.794920,32.052680), zoom);
+
+            // 自定义图层
+            // var imgUrl = 'https://www.bing.com/th?id=OHR.ElbeBastei_ZH-CN9708654240_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=HpEdgeAn'
+            // var lay = new T.TileLayer(imgUrl, {minZoom: 1, maxZoom: 18});
+            // map.addLayer(lay)
+
+            // 创建比例尺控件对象
+            var scale = new T.Control.Scale();
+            map.addControl(scale);
+
+            // 地图类型控件
+            var ctrl = new T.Control.MapType()
+            map.addControl(ctrl)
+
+            // var bd = new T.LngLatBounds(
+            //     new T.LngLat(118.660350,31.980570),
+            //     new T.LngLat(118.951720,32.186070)
+            // )
+
+            // var imgUrl = 'https://www.bing.com/th?id=OHR.ElbeBastei_ZH-CN9708654240_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=HpEdgeAn';
+            // var img = new T.ImageOverlay(imgUrl, bd, {
+            //     opacity: 0.6,
+            //     alt:'hhh'
+            // })
+
+            // map.addOverLay(img);
+
+
+        
+        }
+
+        function getMapBounds() {
+            const bs = map.getBounds() // 获取可是区域
+            const bssw = bs.getSouthWest(); // 获取区域的左下角
+            const bsne = bs.getNorthEast(); // 获取区域的右上角
+            alert("当前地图的可视范围：" + bssw.lng + ',' + bssw.lat + '=>' + bsne.lng + ',' + bsne.lat)
+        }
+
+        function getMapCenter() {
+            alert("当前地图中心点：" + map.getCenter().getLng() + "," + map.getCenter().getLat());
+        }
+
+
+
+    </script>
+</body>
+</html>
